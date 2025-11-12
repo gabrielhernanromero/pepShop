@@ -7,16 +7,16 @@
 // Importar dependencias principales
 const express = require('express');
 
-// Importar routers de cada módulo de negocio
-const productsRouter = require('./routes/products');
-const mascotasRouter = require('./routes/mascotas');
-const clientsRouter = require('./routes/clients');
-const turnsRouter = require('./routes/turns');
-const ordersRouter = require('./routes/orders');
+// Importar routers de cada módulo de negocio (reubicados en src/)
+const productsRouter = require('./src/routes/products');
+const mascotasRouter = require('./src/routes/mascotas');
+const clientsRouter = require('./src/routes/clients');
+const turnsRouter = require('./src/routes/turns');
+const ordersRouter = require('./src/routes/orders');
 
 // Importar base de datos y middlewares centralizados
 const { sequelize } = require('./models');
-const { requestLogger, errorHandler, notFoundHandler } = require('./middlewares');
+const { requestLogger, errorHandler, notFoundHandler } = require('./src/middlewares');
 
 /**
  * Crear instancia de aplicación Express
