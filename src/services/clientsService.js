@@ -4,7 +4,7 @@
  * Gestiona información de propietarios de mascotas y compradores
  */
 
-const { Cliente } = require('../models');
+const { Cliente } = require('../../models');
 
 /**
  * Listar todos los clientes

@@ -4,7 +4,7 @@
  * Gestiona el agendamiento de citas para clientes
  */
 
-const { Turno, Cliente } = require('../models');
+const { Turno, Cliente } = require('../../models');
 
 /**
  * Listar todos los turnos

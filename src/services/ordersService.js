@@ -4,7 +4,7 @@
  * Gestiona órdenes de productos realizadas por clientes
  */
 
-const { Pedido, Cliente } = require('../models');
+const { Pedido, Cliente } = require('../../models');
 
 /**
  * Listar todos los pedidos
