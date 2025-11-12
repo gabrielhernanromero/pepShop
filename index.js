@@ -7,15 +7,11 @@
 // Importar dependencias principales
 const express = require('express');
 
-// Importar routers de cada módulo de negocio (reubicados en src/)
-const productsRouter = require('./src/routes/products');
-const mascotasRouter = require('./src/routes/mascotas');
-const clientsRouter = require('./src/routes/clients');
-const turnsRouter = require('./src/routes/turns');
-const ordersRouter = require('./src/routes/orders');
+// Routers (se montarán dinámicamente más abajo para evitar errores
+// mientras la capa de modelos/BD se reconfigura desde cero)
 
-// Importar base de datos y middlewares centralizados
-const { sequelize } = require('./models');
+// Importar conexión a BD (MySQL via Sequelize) y middlewares
+const conection = require('./conection/conection');
 const { requestLogger, errorHandler, notFoundHandler } = require('./src/middlewares');
 
 /**
@@ -52,12 +48,7 @@ app.get('/', (req, res) => {
     res.send('Bienvenido a la tienda de mascotas');
 });
 
-// Montar routers de cada dominio en sus prefijos respectivos
-app.use('/api/productos', productsRouter);      // CRUD de productos
-app.use('/api/mascotas', mascotasRouter);        // CRUD de mascotas (asociadas a clientes)
-app.use('/api/clientes', clientsRouter);        // CRUD de clientes
-app.use('/api/turnos', turnsRouter);            // CRUD de turnos/citas
-app.use('/api/pedidos', ordersRouter);          // CRUD de pedidos/órdenes
+// Los routers se montarán más abajo, tras autenticarse a la base de datos.
 
 /**
  * MIDDLEWARES DE MANEJO DE ERRORES
@@ -72,18 +63,41 @@ app.use(errorHandler);
 
 /**
  * INICIALIZACIÓN DEL SERVIDOR
- * 1. Sincronizar Sequelize con la base de datos (crear/actualizar tablas)
- * 2. Iniciar servidor Express en el puerto configurado
+ * 1. Autenticar conexión MySQL con Sequelize
+ * 2. Montar routers (si están disponibles) y levantar el servidor
  */
-sequelize.sync()
-    .then(() => {
+async function iniciarServidor() {
+    try {
+        await conection.authenticate();
+        console.log('✅ Conexión MySQL establecida correctamente');
+
+        // Intentar montar routers; si fallan (por falta de modelos), avisar y continuar
+        try {
+            const productsRouter = require('./src/routes/products');
+            const mascotasRouter = require('./src/routes/mascotas');
+            const clientsRouter = require('./src/routes/clients');
+            const turnsRouter = require('./src/routes/turns');
+            const ordersRouter = require('./src/routes/orders');
+
+            app.use('/api/productos', productsRouter);
+            app.use('/api/mascotas', mascotasRouter);
+            app.use('/api/clientes', clientsRouter);
+            app.use('/api/turnos', turnsRouter);
+            app.use('/api/pedidos', ordersRouter);
+            console.log('🧭 Rutas API montadas');
+        } catch (routesErr) {
+            console.warn('⚠️ No se pudieron montar las rutas aún (pendiente capa de modelos/servicios):', routesErr.message);
+        }
+
         app.listen(puerto, () => {
-            console.log(`Servidor escuchando en el puerto ${puerto}`);
+            console.log(`🚀 Servidor escuchando en el puerto ${puerto}`);
         });
-    })
-    .catch((err) => {
-        console.error('No se pudo sincronizar la base de datos:', err);
+    } catch (err) {
+        console.error('❌ Error al conectar a la base de datos:', err.message);
         process.exit(1);
-    });
+    }
+}
+
+iniciarServidor();
 
 
