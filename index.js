@@ -64,12 +64,17 @@ app.use(errorHandler);
 /**
  * INICIALIZACIÓN DEL SERVIDOR
  * 1. Autenticar conexión MySQL con Sequelize
- * 2. Montar routers (si están disponibles) y levantar el servidor
+ * 2. Sincronizar modelos con la base de datos (crear/actualizar tablas)
+ * 3. Montar routers y levantar el servidor
  */
 async function iniciarServidor() {
     try {
         await conection.authenticate();
         console.log('✅ Conexión MySQL establecida correctamente');
+
+        // Sincronizar modelos con la base de datos
+        await conection.sync({ alter: true });
+        console.log('✅ Tablas sincronizadas en la base de datos');
 
         // Intentar montar routers; si fallan (por falta de modelos), avisar y continuar
         try {
