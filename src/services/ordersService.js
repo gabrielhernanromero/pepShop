@@ -1,10 +1,11 @@
 /**
- * Servicio de Pedidos (Órdenes)
- * Contiene la lógica de negocio para operaciones CRUD de pedidos de compra
+ * Servicio de Pedidos/Órdenes
+ * Contiene la lógica de negocio para operaciones CRUD de pedidos
  * Gestiona órdenes de productos realizadas por clientes
  */
 
-const { Pedido, Cliente } = require('../../models');
+const Pedido = require('../../models/Pedido');
+const Cliente = require('../../models/Cliente');
 
 /**
  * Listar todos los pedidos

@@ -1,10 +1,11 @@
 /**
- * Servicio de Turnos
- * Contiene la lógica de negocio para operaciones CRUD de turnos/citas
+ * Servicio de Turnos/Citas
+ * Contiene la lógica de negocio para operaciones CRUD de turnos
  * Gestiona el agendamiento de citas para clientes
  */
 
-const { Turno, Cliente } = require('../../models');
+const Turno = require('../../models/Turno');
+const Cliente = require('../../models/Cliente');
 
 /**
  * Listar todos los turnos

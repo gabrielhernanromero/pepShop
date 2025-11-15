@@ -4,7 +4,7 @@
  * Gestiona el inventario y disponibilidad de productos en la tienda
  */
 
-const { Product } = require('../../models');
+const Product = require('../../models/Product');
 
 /**
  * Listar todos los productos disponibles
