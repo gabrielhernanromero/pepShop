@@ -4,8 +4,8 @@
  * Gestiona órdenes de productos realizadas por clientes
  */
 
-const Pedido = require('../../models/Pedido');
-const Cliente = require('../../models/Cliente');
+const Pedido = require('../../src/models/Pedido');
+const Cliente = require('../../src/models/Cliente');
 
 /**
  * Listar todos los pedidos

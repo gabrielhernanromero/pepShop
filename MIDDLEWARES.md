@@ -5,9 +5,9 @@ Los middlewares son funciones que se ejecutan antes de que llegue la petición a
 ## 📂 Estructura de Middlewares
 
 ```
-middlewares/
+src/middlewares/
 ├── index.js                    # Exporta todos los middlewares
-├── validationMiddleware.js     # Validación de datos (productos, mascotas)
+├── validationMiddleware.js     # Validación de datos (productos, mascotas, clientes, turnos, pedidos)
 ├── errorMiddleware.js          # Manejo centralizado de errores
 ├── loggerMiddleware.js         # Logging de peticiones
 └── authMiddleware.js           # Autenticación básica
@@ -21,7 +21,10 @@ middlewares/
 
 **Middlewares:**
 - `validateProduct` — Valida campos de productos (name, price, stock)
-- `validatePet` — Valida campos de mascotas (name, species, age)
+- `validateMascota` — Valida campos de mascotas (name, species, age, clienteId)
+- `validateClient` — Valida campos de clientes (name, email?)
+- `validateTurn` — Valida campos de turnos (dateTime, clienteId?)
+- `validateOrder` — Valida campos de pedidos (total, clienteId?)
 
 **Uso en rutas:**
 ```javascript
@@ -31,12 +34,12 @@ router.post('/', validateProduct, controller.create);
 router.put('/:id', validateProduct, controller.update);
 ```
 
-**Validaciones aplicadas:**
-- `name` — Requerido, string no vacío
-- `price` — Requerido, número >= 0
-- `stock` — Opcional, entero >= 0
-- `species` (mascotas) — Requerido, string no vacío
-- `age` (mascotas) — Opcional, entero >= 0
+**Validaciones aplicadas (resumen):**
+- Producto: `name` requerido string no vacío; `price` requerido número >= 0; `stock` opcional entero >= 0
+- Mascota: `name` y `species` requeridos string no vacíos; `age` opcional entero >= 0; `clienteId` opcional numérico
+- Cliente: `name` requerido string no vacío; `email` opcional string válido (no vacío si viene)
+- Turno: `dateTime` requerido; `clienteId` opcional numérico
+- Pedido: `total` requerido número >= 0; `clienteId` opcional numérico
 
 **Ejemplo de error:**
 ```bash
@@ -89,7 +92,7 @@ curl http://localhost:3000/api/inexistente
 
 **Uso en index.js (global):**
 ```javascript
-const { requestLogger } = require('./middlewares');
+const { requestLogger } = require('./src/middlewares');
 
 app.use(requestLogger);
 ```
@@ -164,7 +167,7 @@ app.use(requestLogger);
 
 // 3. Definir rutas (pueden tener middlewares específicos)
 app.use('/api/productos', productsRouter);
-app.use('/api/mascotas', petsRouter);
+app.use('/api/mascotas', mascotasRouter);
 
 // 4. Manejador 404 (antes del error handler)
 app.use(notFoundHandler);
@@ -179,7 +182,7 @@ app.use(errorHandler);
 
 ## 💡 Cómo Agregar un Nuevo Middleware
 
-1. Crear archivo en `middlewares/tuMiddleware.js`:
+1. Crear archivo en `src/middlewares/tuMiddleware.js`:
 ```javascript
 function tuMiddleware(req, res, next) {
   // Hacer algo
@@ -189,7 +192,7 @@ function tuMiddleware(req, res, next) {
 module.exports = { tuMiddleware };
 ```
 
-2. Exportarlo en `middlewares/index.js`:
+2. Exportarlo en `src/middlewares/index.js`:
 ```javascript
 const { tuMiddleware } = require('./tuMiddleware');
 
@@ -267,4 +270,4 @@ curl http://localhost:3000/api/algo-inexistente
 
 ---
 
-**¿Necesitas más middlewares o personalizaciones?** Contacta o revisa la estructura en `middlewares/`.
+**¿Necesitas más middlewares o personalizaciones?** Contacta o revisa la estructura en `src/middlewares/`.

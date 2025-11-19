@@ -11,7 +11,7 @@ const express = require('express');
 // mientras la capa de modelos/BD se reconfigura desde cero)
 
 // Importar conexión a BD (MySQL via Sequelize) y middlewares
-const conection = require('./conection/conection');
+const conection = require('./src/conection/conection');
 const { requestLogger, errorHandler, notFoundHandler } = require('./src/middlewares');
 
 /**
@@ -104,5 +104,4 @@ async function iniciarServidor() {
 }
 
 iniciarServidor();
-
 

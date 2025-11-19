@@ -4,8 +4,8 @@
  * Interactúa directamente con el modelo Mascota y la base de datos
  */
 
-const Mascota = require('../../models/Mascota');
-const Cliente = require('../../models/Cliente');
+const Mascota = require('../../src/models/Mascota');
+const Cliente = require('../../src/models/Cliente');
 
 /**
  * Listar todas las mascotas
