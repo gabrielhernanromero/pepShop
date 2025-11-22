@@ -31,10 +31,14 @@ async function getClient(id) {
  * @throws {Error} Si hay error en la creación
  */
 async function createClient(data) {
+  if (!data.password) {
+    throw new Error('Password requerida para crear cliente');
+  }
   const payload = {
     name: data.name,
     email: data.email || null,
     phone: data.phone || null,
+    password: data.password,
   };
   return await Cliente.create(payload);
 }

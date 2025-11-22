@@ -13,10 +13,18 @@ const clientsService = require('../services/clientsService');
  * @param {Object} res - Objeto de respuesta HTTP
  * @param {Function} next - Función para pasar al siguiente middleware
  */
+function sanitize(client) {
+  if (!client) return client;
+  const plain = client.toJSON ? client.toJSON() : client;
+  delete plain.password;
+  delete plain.salt;
+  return plain;
+}
+
 async function list(req, res, next) {
   try {
     const items = await clientsService.listClients();
-    res.json({ success: true, data: items });
+    res.json({ success: true, data: items.map(sanitize) });
   } catch (err) {
     next(err);
   }
@@ -33,7 +41,7 @@ async function getById(req, res, next) {
   try {
     const item = await clientsService.getClient(req.params.id);
     if (!item) return res.status(404).json({ success: false, error: 'Cliente no encontrado' });
-    res.json({ success: true, data: item });
+    res.json({ success: true, data: sanitize(item) });
   } catch (err) {
     next(err);
   }
@@ -50,7 +58,7 @@ async function getById(req, res, next) {
 async function create(req, res, next) {
   try {
     const created = await clientsService.createClient(req.body);
-    res.status(201).json({ success: true, data: created });
+    res.status(201).json({ success: true, data: sanitize(created) });
   } catch (err) {
     next(err);
   }
@@ -68,7 +76,7 @@ async function update(req, res, next) {
   try {
     const updated = await clientsService.updateClient(req.params.id, req.body);
     if (!updated) return res.status(404).json({ success: false, error: 'Cliente no encontrado' });
-    res.json({ success: true, data: updated });
+    res.json({ success: true, data: sanitize(updated) });
   } catch (err) {
     next(err);
   }

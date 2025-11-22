@@ -244,7 +244,7 @@ curl -X POST http://localhost:3000/api/mascotas \
 ```bash
 curl -X POST http://localhost:3000/api/clientes \
   -H "Content-Type: application/json" \
-  -d '{"name":"Juan Pérez","email":"juan@example.com","phone":"555-1234"}'
+  -d '{"name":"Juan Pérez","email":"juan@example.com","phone":"555-1234","password":"MiPasswordSegura123"}'
 ```
 
 #### Listar mascotas
@@ -312,6 +312,8 @@ DB_NAME=pepShop
   name: String (requerido),
   email: String (opcional),
   phone: String (opcional),
+  password: String (hash bcrypt, requerido),
+  salt: String (salt usado para generar el hash),
   createdAt: DateTime,
   updatedAt: DateTime
 }
@@ -389,6 +391,48 @@ La aplicación incluye varios middlewares reutilizables ubicados en `src/middlew
 - **authMiddleware** — Autenticación básica con token simulado
 
 Todos se exportan desde `src/middlewares/index.js`.
+
+## 🔐 Gestión de Contraseñas (Clientes)
+
+Para el modelo `Cliente` se implementó almacenamiento seguro de contraseñas usando **bcrypt**.
+
+### Campos añadidos
+- `password`: almacena el hash de la contraseña (nunca texto plano).
+- `salt`: almacena el salt generado por bcrypt para esa contraseña.
+
+### Hook `beforeCreate`
+Al crear un cliente:
+1. Se genera un salt con `bcrypt.genSalt(10)`.
+2. Se genera el hash con `bcrypt.hash(plainPassword, salt)`.
+3. Se guarda el `salt` y el hash en los campos correspondientes antes de que el registro se inserte.
+
+### Métodos de verificación
+- Método de instancia: `cliente.verifyPassword(plain)` retorna `true/false` comparando la contraseña ingresada con el hash.
+- Método estático: `Cliente.decodeVerifyPass(plain, hash)` permite verificar manualmente un hash si se necesita.
+
+### Sanitización de respuestas
+El controlador de clientes elimina `password` y `salt` antes de enviar respuestas JSON para evitar exponer información sensible.
+
+### Ejemplo de verificación
+```javascript
+const Cliente = require('./src/models/Cliente');
+const user = await Cliente.findByPk(1);
+const ok = await user.verifyPassword('MiPasswordSegura123'); // true si coincide
+```
+
+### Creación de cliente (POST)
+El endpoint `/api/clientes` ahora requiere el campo `password`:
+```bash
+curl -X POST http://localhost:3000/api/clientes \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Ana","email":"ana@example.com","phone":"555-9999","password":"OtraPasswordFuerte!"}'
+```
+
+### Notas de seguridad futuras
+- Implementar rotación de salt sólo al cambiar contraseña.
+- Agregar política de complejidad de password (longitud mínima, caracteres especiales).
+- Migrar a autenticación con JWT en endpoints protegidos.
+- Evitar devolver el objeto `Cliente` sin sanitización en nuevos servicios.
 
 ## 🛠️ Scripts npm
 
