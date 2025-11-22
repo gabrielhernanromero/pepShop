@@ -6,6 +6,7 @@
 
 // Importar dependencias principales
 const express = require('express');
+const { SERVER_PORT } = require('./config/config');
 
 // Routers (se montarán dinámicamente más abajo para evitar errores
 // mientras la capa de modelos/BD se reconfigura desde cero)
@@ -35,8 +36,8 @@ app.use(requestLogger);
  * CONFIGURACIÓN DEL SERVIDOR
  */
 
-// Puerto de escucha: se puede configurar con variable de entorno PORT, por defecto 3000
-const puerto = process.env.PORT || 3000;
+// Puerto de escucha: usa variable de entorno SERVER_PORT o por defecto 3000
+const puerto = SERVER_PORT || 3000;
 
 /**
  * RUTAS (ENDPOINTS)
@@ -98,7 +99,7 @@ async function iniciarServidor() {
             console.log(`🚀 Servidor escuchando en el puerto ${puerto}`);
         });
     } catch (err) {
-        console.error('❌ Error al conectar a la base de datos:', err.message);
+        console.error('❌ Error al conectar a la base de datos:', err);
         process.exit(1);
     }
 }

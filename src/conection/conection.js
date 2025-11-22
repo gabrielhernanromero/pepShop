@@ -1,14 +1,15 @@
 // Conexión a MySQL con Sequelize
-// Base de datos: pepShop | Usuario: root | Password: root | Host: localhost | Puerto: 8889
+// Configuración desde variables de entorno
 
 const { Sequelize } = require('sequelize');
+const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_DIALECT } = require('../../config/config');
 
-// Crear instancia de Sequelize (solo exportamos la instancia)
-const conection = new Sequelize('pepShop', 'root', 'root', {
-	host: 'localhost',
-	dialect: 'mysql',
-	port: 8889,
+// Crear instancia de Sequelize usando variables de entorno
+const conection = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+	host: DB_HOST,
+	dialect: DB_DIALECT,
+	port: parseInt(DB_PORT),
+	logging: false,
 });
 
 module.exports = conection;
-

@@ -77,24 +77,36 @@ cd /Users/gabrielromero/Desktop/PepShop
 npm install
 ```
 
-3. **Configurar la base de datos MySQL**
+3. **Configurar variables de entorno**
+
+   - Copiar el archivo `.env.example` y renombrarlo a `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+
+   - Editar el archivo `.env` con tus credenciales de MySQL:
+   ```env
+   DB_NAME="pepShop"
+   DB_USER="root"
+   DB_PASSWORD="root"
+   DB_HOST="localhost"
+   DB_PORT="8889"
+   DB_DIALECT="mysql"
+   SERVER_PORT=3000
+   ```
+
+   **Nota:** El archivo `.env.example` sirve como guía para saber qué variables configurar. Nunca subas el archivo `.env` a GitHub ya que contiene información sensible.
+
+4. **Configurar la base de datos MySQL**
 
    - Crear la base de datos `pepShop` en MySQL:
    ```sql
    CREATE DATABASE pepShop;
    ```
 
-   - Verificar la configuración de conexión en `src/conection/conection.js`:
-   ```javascript
-   // Configuración por defecto:
-   database: 'pepShop'
-   user: 'root'
-   password: 'root'
-   host: 'localhost'
-   port: 8889  // Puerto de MAMP (cambiar a 3306 para MySQL estándar)
-   ```
+   - La configuración de conexión se toma automáticamente del archivo `.env`
 
-4. **Ejecutar el servidor**
+5. **Ejecutar el servidor**
 ```bash
 npm start
 # O con nodemon (reload automático):
