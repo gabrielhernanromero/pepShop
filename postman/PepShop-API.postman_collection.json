@@ -1,0 +1,515 @@
+{
+  "info": {
+    "name": "PepShop API",
+    "_postman_id": "pepshop-api-collection",
+    "description": "Colección completa de endpoints de PepShop API con ejemplos de uso",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@ejemplo.com\",\n  \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login de usuario. Retorna token JWT válido por 2 horas."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Listar Clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes"]
+            },
+            "description": "Obtiene todos los clientes registrados"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Cliente por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "1"]
+            },
+            "description": "Obtiene un cliente específico por su ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Juan Pérez\",\n  \"email\": \"juan@ejemplo.com\",\n  \"phone\": \"555-1234\",\n  \"password\": \"MiPassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes"]
+            },
+            "description": "Crea un nuevo cliente. La password se hashea automáticamente con bcrypt."
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Juan Pérez Actualizado\",\n  \"phone\": \"555-9999\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "1"]
+            },
+            "description": "Actualiza un cliente existente"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Cliente",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "1"]
+            },
+            "description": "Elimina un cliente por ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Productos",
+      "item": [
+        {
+          "name": "Listar Productos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos"]
+            },
+            "description": "Obtiene todos los productos"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Producto por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos", "1"]
+            },
+            "description": "Obtiene un producto específico"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Collar para perro\",\n  \"description\": \"Collar ajustable de nylon\",\n  \"price\": 15.99,\n  \"stock\": 20\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/productos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos"]
+            },
+            "description": "Crea un nuevo producto"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Producto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 19.99,\n  \"stock\": 15\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos", "1"]
+            },
+            "description": "Actualiza un producto existente"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Producto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos", "1"]
+            },
+            "description": "Elimina un producto"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Mascotas",
+      "item": [
+        {
+          "name": "Listar Mascotas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/mascotas",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "mascotas"]
+            },
+            "description": "Obtiene todas las mascotas con sus propietarios"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Mascota por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/mascotas/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "mascotas", "1"]
+            },
+            "description": "Obtiene una mascota específica con su propietario"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Mascota",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rex\",\n  \"species\": \"Perro\",\n  \"breed\": \"Labrador\",\n  \"age\": 3,\n  \"clienteId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mascotas",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "mascotas"]
+            },
+            "description": "Crea una nueva mascota asociada a un cliente"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Mascota",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"age\": 4,\n  \"breed\": \"Labrador Retriever\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mascotas/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "mascotas", "1"]
+            },
+            "description": "Actualiza una mascota existente"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Mascota",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/mascotas/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "mascotas", "1"]
+            },
+            "description": "Elimina una mascota"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Turnos",
+      "item": [
+        {
+          "name": "Listar Turnos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/turnos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "turnos"]
+            },
+            "description": "Obtiene todos los turnos"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Turno por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/turnos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "turnos", "1"]
+            },
+            "description": "Obtiene un turno específico"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Turno",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dateTime\": \"2025-11-30T10:00:00\",\n  \"reason\": \"Consulta veterinaria\",\n  \"status\": \"pendiente\",\n  \"clienteId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/turnos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "turnos"]
+            },
+            "description": "Crea un nuevo turno para un cliente"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Turno",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/turnos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "turnos", "1"]
+            },
+            "description": "Actualiza un turno existente"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Turno",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/turnos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "turnos", "1"]
+            },
+            "description": "Elimina un turno"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "Listar Pedidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos"]
+            },
+            "description": "Obtiene todos los pedidos"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Pedido por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos", "1"]
+            },
+            "description": "Obtiene un pedido específico"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"total\": 45.99,\n  \"status\": \"pendiente\",\n  \"clienteId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos"]
+            },
+            "description": "Crea un nuevo pedido para un cliente"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Pedido",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos", "1"]
+            },
+            "description": "Actualiza un pedido existente"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Pedido",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos", "1"]
+            },
+            "description": "Elimina un pedido"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
