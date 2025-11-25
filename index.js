@@ -84,12 +84,14 @@ async function iniciarServidor() {
             const clientsRouter = require('./src/routes/clients');
             const turnsRouter = require('./src/routes/turns');
             const ordersRouter = require('./src/routes/orders');
+            const authRouter = require('./src/routes/auth');
 
             app.use('/api/productos', productsRouter);
             app.use('/api/mascotas', mascotasRouter);
             app.use('/api/clientes', clientsRouter);
             app.use('/api/turnos', turnsRouter);
             app.use('/api/pedidos', ordersRouter);
+            app.use('/api/auth', authRouter);
             console.log('🧭 Rutas API montadas');
         } catch (routesErr) {
             console.warn('⚠️ No se pudieron montar las rutas aún (pendiente capa de modelos/servicios):', routesErr.message);

@@ -434,6 +434,68 @@ curl -X POST http://localhost:3000/api/clientes \
 - Migrar a autenticación con JWT en endpoints protegidos.
 - Evitar devolver el objeto `Cliente` sin sanitización en nuevos servicios.
 
+## 🔑 Autenticación (Login con JWT)
+
+Se implementó un endpoint de login que genera tokens **JWT** para autenticar solicitudes posteriores.
+
+### Endpoint
+`POST /api/auth/login`
+
+### Body (JSON)
+```json
+{
+  "email": "demo@local.test",
+  "password": "SuperSegura123"
+}
+```
+
+### Respuesta exitosa
+```json
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "email": "demo@local.test",
+    "name": "Demo User"
+  }
+}
+```
+
+### Flujo interno
+1. Se valida formato de email y que ambos campos existan.
+2. Se busca el usuario por email en la base de datos.
+3. Se verifica la contraseña con `bcrypt.compare` (método `verifyPassword`).
+4. Se construye un payload público `{ id, email, name }`.
+5. Se firma el token con `jwt.sign(payload, JWT_SECRET, { expiresIn: '2h' })`.
+6. Se retorna el token y los datos públicos del usuario (sin password ni salt).
+
+### Uso del token en peticiones protegidas
+Enviar el token en el encabezado `Authorization`:
+```
+Authorization: Bearer <token>
+```
+
+### Variable de entorno necesaria
+Agregar en tu `.env` (ya documentado en `.env.example`):
+```
+JWT_SECRET="tuClaveSecretaMuySegura"
+```
+Si falta, se usa un valor por defecto (`pepShopSuperSecreto`) sólo apto para desarrollo.
+
+### Probar con curl
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"demo@local.test","password":"SuperSegura123"}'
+```
+
+### Próximos pasos sugeridos
+- Crear middleware que valide y decodifique el JWT para proteger rutas.
+- Añadir roles/permisos dentro del payload (por ejemplo `role: 'admin'`).
+- Refrescar tokens (refresh token + access token) para sesiones largas.
+- Invalidar tokens rotando `JWT_SECRET` en producción bajo políticas.
+
 ## 🛠️ Scripts npm
 
 ```bash
