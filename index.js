@@ -15,6 +15,9 @@ const { SERVER_PORT } = require('./config/config');
 const conection = require('./src/conection/conection');
 const { requestLogger, errorHandler, notFoundHandler } = require('./src/middlewares');
 
+// Importar modelos para forzar su registro y sincronización
+require('./src/models');
+
 /**
  * Crear instancia de aplicación Express
  * app es el objeto principal que maneja todas las peticiones HTTP
@@ -52,17 +55,6 @@ app.get('/', (req, res) => {
 // Los routers se montarán más abajo, tras autenticarse a la base de datos.
 
 /**
- * MIDDLEWARES DE MANEJO DE ERRORES
- * Deben ir después de todas las rutas para capturar todas las peticiones
- */
-
-// Manejar rutas no encontradas (404)
-app.use(notFoundHandler);
-
-// Manejo centralizado de errores (debe ser SIEMPRE el último middleware)
-app.use(errorHandler);
-
-/**
  * INICIALIZACIÓN DEL SERVIDOR
  * 1. Autenticar conexión MySQL con Sequelize
  * 2. Sincronizar modelos con la base de datos (crear/actualizar tablas)
@@ -96,6 +88,17 @@ async function iniciarServidor() {
         } catch (routesErr) {
             console.warn('⚠️ No se pudieron montar las rutas aún (pendiente capa de modelos/servicios):', routesErr.message);
         }
+
+        /**
+         * MIDDLEWARES DE MANEJO DE ERRORES
+         * Deben ir después de todas las rutas para capturar todas las peticiones
+         */
+
+        // Manejar rutas no encontradas (404)
+        app.use(notFoundHandler);
+
+        // Manejo centralizado de errores (debe ser SIEMPRE el último middleware)
+        app.use(errorHandler);
 
         app.listen(puerto, () => {
             console.log(`🚀 Servidor escuchando en el puerto ${puerto}`);
